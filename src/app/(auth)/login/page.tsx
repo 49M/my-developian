@@ -26,18 +26,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='flex h-screen items-center justify-center'>
+    <div className='flex h-screen w-screen items-center justify-center font-roboto'>
       <form onSubmit={(e) => handleSubmit(e, 'login')} className='flex flex-col'>
-        <div>
-          <button type='submit'>Log in</button>
-          <button type='button' onClick={(e) => handleSubmit(e, 'signup')}>
+        <div className='flex h-[30px] flex-row space-x-5'>
+          <button type='submit' className='w-[100px] rounded-2xl border border-black'>
+            Log in
+          </button>
+          <button
+            type='button'
+            onClick={(e) => handleSubmit(e, 'signup')}
+            className='w-[100px] rounded-2xl border border-black'
+          >
             Sign up
           </button>
         </div>
-        <label htmlFor='email'>Email:</label>
-        <input id='email' name='email' type='email' required />
+        <label htmlFor='email' className='text-blue-500'>
+          Email:
+        </label>
+        <input type='email' required className='border' />
         <label htmlFor='password'>Password:</label>
-        <input id='password' name='password' type='password' required />
+        <input type='password' required />
         {error && <p className='mt-2 text-red-500'>{error}</p>}
       </form>
     </div>
