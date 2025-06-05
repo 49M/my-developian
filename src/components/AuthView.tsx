@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { login } from '../app/(auth)/login/actions';
 import { signup } from '../app/(auth)/signup/actions';
+import { useRouter } from 'next/navigation';
 
 interface AuthProps {
   action: string;
@@ -9,6 +10,7 @@ interface AuthProps {
 
 export default function AuthPage({ action }: AuthProps) {
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
@@ -37,19 +39,22 @@ export default function AuthPage({ action }: AuthProps) {
       </h1>
       <div className='mb-[150px] mt-[40px] flex w-screen items-center justify-center font-roboto'>
         <form
-          onSubmit={(e) => handleSubmit(e, 'login')}
+          onSubmit={
+            action === 'login' ? (e) => handleSubmit(e, 'login') : (e) => handleSubmit(e, 'signup')
+          }
           className='flex flex-col rounded-xl border border-black p-12 px-20 shadow-lg'
         >
           <div className='flex h-[30px] flex-row space-x-5'>
             <button
-              type='submit'
+              onClick={action !== 'login' ? () => router.push('/login') : undefined}
+              type='button'
               className={`w-[100px] rounded-2xl ${action === 'login' ? 'bg-gray-700' : 'border'} text-white shadow-md hover:bg-gray-500`}
             >
               Log in
             </button>
             <button
               type='button'
-              onClick={(e) => handleSubmit(e, 'signup')}
+              onClick={action !== 'signup' ? () => router.push('/signup') : undefined}
               className={`w-[100px] rounded-2xl ${action === 'signup' ? 'bg-gray-700' : 'border'} text-white shadow-md hover:bg-gray-500`}
             >
               Sign up
@@ -68,6 +73,12 @@ export default function AuthPage({ action }: AuthProps) {
             className='rounded-md border border-black bg-transparent'
           />
           {error && <p className='mt-2 text-red-500'>{error}</p>}
+          <button
+            type='submit'
+            className='mx-auto mt-[35px] w-[100px] rounded-md border py-[2px] text-white shadow-md hover:border-gray-700 hover:bg-gray-700'
+          >
+            Submit
+          </button>
         </form>
       </div>
     </div>
