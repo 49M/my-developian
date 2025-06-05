@@ -4,16 +4,12 @@ import { login } from '../app/(auth)/login/actions';
 import { signup } from '../app/(auth)/signup/actions';
 import { useRouter } from 'next/navigation';
 
-interface AuthProps {
-  action: string;
-}
-
-export default function AuthPage({ action }: AuthProps) {
+export default function AuthPage({ type }: { type: 'login' | 'signup' }) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLFormElement>,
     action: 'login' | 'signup'
   ) {
     e.preventDefault();
@@ -26,10 +22,12 @@ export default function AuthPage({ action }: AuthProps) {
       if (!form) return;
       formData = new FormData(form);
     }
+    console.log(formData);
     const result = action === 'login' ? await login(formData) : await signup(formData);
     if (result?.error) {
       setError(result.error);
     }
+    console.log('success');
   }
 
   return (
@@ -40,22 +38,22 @@ export default function AuthPage({ action }: AuthProps) {
       <div className='mb-[150px] mt-[40px] flex w-screen items-center justify-center font-roboto'>
         <form
           onSubmit={
-            action === 'login' ? (e) => handleSubmit(e, 'login') : (e) => handleSubmit(e, 'signup')
+            type === 'login' ? (e) => handleSubmit(e, 'login') : (e) => handleSubmit(e, 'signup')
           }
           className='flex flex-col rounded-xl border border-black p-12 px-20 shadow-lg'
         >
           <div className='flex h-[30px] flex-row space-x-5'>
             <button
-              onClick={action !== 'login' ? () => router.push('/login') : undefined}
+              onClick={type !== 'login' ? () => router.push('/login') : undefined}
               type='button'
-              className={`w-[100px] rounded-2xl ${action === 'login' ? 'bg-gray-700' : 'border'} text-white shadow-md hover:bg-gray-500`}
+              className={`w-[100px] rounded-2xl ${type === 'login' ? 'bg-gray-700' : 'border'} text-white shadow-md hover:bg-gray-500`}
             >
               Log in
             </button>
             <button
               type='button'
-              onClick={action !== 'signup' ? () => router.push('/signup') : undefined}
-              className={`w-[100px] rounded-2xl ${action === 'signup' ? 'bg-gray-700' : 'border'} text-white shadow-md hover:bg-gray-500`}
+              onClick={type !== 'signup' ? () => router.push('/signup') : undefined}
+              className={`w-[100px] rounded-2xl ${type === 'signup' ? 'bg-gray-700' : 'border'} text-white shadow-md hover:bg-gray-500`}
             >
               Sign up
             </button>
@@ -63,12 +61,18 @@ export default function AuthPage({ action }: AuthProps) {
           <label htmlFor='email' className='mt-[30px] text-white'>
             Email:
           </label>
-          <input type='email' required className='rounded-md border border-black bg-transparent' />
+          <input
+            name='email'
+            type='email'
+            required
+            className='rounded-md border border-black bg-transparent'
+          />
           <label htmlFor='password' className='mt-[15px] text-white'>
             Password:
           </label>
           <input
             type='password'
+            name='password'
             required
             className='rounded-md border border-black bg-transparent'
           />
