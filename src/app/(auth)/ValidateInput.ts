@@ -10,7 +10,6 @@ export default function validateInput(formData: FormData) {
     email: formData.get('email'),
     password: formData.get('password'),
   });
-  console.log(result);
 
   if (!result.success) {
     return { error: 'Invalid email or password' };
