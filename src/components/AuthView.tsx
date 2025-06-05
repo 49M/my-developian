@@ -22,12 +22,10 @@ export default function AuthPage({ type }: { type: 'login' | 'signup' }) {
       if (!form) return;
       formData = new FormData(form);
     }
-    console.log(formData);
     const result = action === 'login' ? await login(formData) : await signup(formData);
     if (result?.error) {
       setError(result.error);
     }
-    console.log('success');
   }
 
   return (
