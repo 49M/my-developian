@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import validateInput from '../ValidateInput';
 
-export async function login(formData: FormData) {
+export async function signup(formData: FormData) {
   const supabase = await createClient();
 
   const data = validateInput(formData);
@@ -12,9 +12,9 @@ export async function login(formData: FormData) {
     return data;
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  const { error } = await supabase.auth.signUp(data);
   if (error) {
-    return { error: 'Log in failed. Please check your credentials' };
+    return { error: 'Sign-up failed. Please check your credentials' };
   }
   revalidatePath('/', 'layout');
   redirect('/');
