@@ -12,10 +12,26 @@ export async function signup(formData: FormData) {
     return data;
   }
 
-  const { error } = await supabase.auth.signUp(data);
-  if (error) {
+  const { error: authError, data: authData } = await supabase.auth.signUp({
+    email: data.email,
+    password: data.password,
+    options: {
+      data: data.username ? { username: data.username } : {},
+    },
+  });
+  if (authError) {
     return { error: 'Sign-up failed. Please check your credentials' };
   }
+  // const userId = authData?.user?.id;
+  // const { error: insertError } = await supabase.from('users').insert({
+  //   id: userId,
+  //   email: data.email,
+  //   username: data.username,
+  // });
+  // if (insertError) {
+  //   console.log(insertError);
+  //   return { error: 'Failed to save user' };
+  // }
   revalidatePath('/', 'layout');
-  redirect('/');
+  redirect('/confirm-email');
 }

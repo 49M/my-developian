@@ -56,7 +56,20 @@ export default function AuthPage({ type }: { type: 'login' | 'signup' }) {
               Sign up
             </button>
           </div>
-          <label htmlFor='email' className='mt-[30px] text-white'>
+          {type === 'signup' && (
+            <div className='flex flex-col'>
+              <label htmlFor='username' className='mt-[30px] text-white'>
+                Username:
+              </label>
+              <input
+                name='username'
+                type='username'
+                required
+                className='rounded-md border border-black bg-transparent'
+              />
+            </div>
+          )}
+          <label htmlFor='email' className='mt-[15px] text-white'>
             Email:
           </label>
           <input
