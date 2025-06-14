@@ -24,10 +24,14 @@ export default function Page() {
 
   return (
     <div className='p-8'>
-      <h1 className='mt-[20px] flex justify-center font-roboto text-[45px] font-semibold'>
-        My Developian
+      <h1 className='font-manrope mt-[40px] flex justify-center text-[45px] font-bold'>
+        Your Ultimate Path from&nbsp;<b>0</b>&nbsp;to&nbsp;<b>100</b>
       </h1>
-      <h1 className='text-xl font-bold'>{user ? `Welcome, ${user.email}` : 'Hello, Guest'}</h1>
+      <h1 className='text-xl font-bold'>
+        {user
+          ? `Welcome, ${user.user_metadata.username.charAt(0).toUpperCase() + user.user_metadata.username.slice(1)}`
+          : 'Hello, Guest'}
+      </h1>
       {user && (
         <button onClick={() => signOut()} className='mt-4 rounded border px-4 py-2'>
           Sign Out
