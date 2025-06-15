@@ -9,10 +9,16 @@ interface TopBarProps {
 
 export default function TopBar({ name, mode, changeMode }: TopBarProps) {
   return (
-    <div className='w-full border-b px-6 pb-3 pt-4'>
+    <div
+      className={`w-full border-b px-6 pb-3 pt-4 ${mode === 'light' ? 'border-black text-black' : 'border-white text-white'}`}
+    >
       <div className='flex w-full justify-between'>
         <div className='flex'>
-          <h3 className='mr-8 border-r pr-8 font-manrope text-[18px] font-bold'>My Developian</h3>
+          <h3
+            className={`mr-8 select-none border-r ${mode === 'light' ? 'border-black' : 'border-white'} pr-8 font-manrope text-[18px] font-bold`}
+          >
+            My Developian
+          </h3>
           <div className='flex space-x-6 pt-[3px]'>
             <h3 className='font-manrope'>Roadmaps</h3>
             <h3 className='font-manrope'>Calender</h3>
@@ -25,7 +31,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
         <div className='flex space-x-5'>
           {mode === 'dark' && (
             <svg
-              className='h-6 w-6 text-gray-800 dark:text-white'
+              className='mt-[5.5px] h-6 w-6 text-gray-800 dark:text-white'
               aria-hidden='true'
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -45,7 +51,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
           )}
           {mode === 'light' && (
             <svg
-              className='h-6 w-6 text-gray-800 dark:text-white'
+              className='mt-[5.5px] h-6 w-6 text-gray-800 dark:text-white'
               aria-hidden='true'
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -73,7 +79,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
           </div>
           <button
             onClick={() => signOut()}
-            className='rounded border px-[5px] font-manrope text-[14px]'
+            className='select-none rounded border px-[5px] font-manrope text-[14px]'
           >
             Sign Out
           </button>
