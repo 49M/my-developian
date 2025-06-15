@@ -11,6 +11,7 @@ export default function Page() {
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
   const goalTypeCSS = 'border w-[100px] py-[2px] rounded-md';
+  const [mode, setMode] = useState<string>('light');
 
   useEffect(() => {
     const supabase = createClient();
@@ -25,12 +26,16 @@ export default function Page() {
   }, [router]);
 
   return (
-    <div className='font-manrope'>
+    <div
+      className={`${mode === 'light' ? 'bg-custom-light' : 'bg-custom-dark'} min-h-screen w-full bg-cover bg-center bg-no-repeat font-manrope`}
+    >
       <TopBar
         name={
           user?.user_metadata.username.charAt(0).toUpperCase() +
             user?.user_metadata.username.slice(1) || 'Guest'
         }
+        mode={mode}
+        changeMode={setMode}
       />
       <h1 className='mt-[40px] flex justify-center text-[45px] font-bold'>
         Your Ultimate Path from&nbsp;<b>0</b>&nbsp;to&nbsp;<b>100</b>
