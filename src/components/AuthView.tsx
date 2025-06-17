@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 export default function AuthPage({ type }: { type: 'login' | 'signup' }) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const fieldCSS = 'flex w-[300px] flex-col';
+  const inputCSS = 'rounded-md border border-black bg-transparent pl-2';
 
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLFormElement>,
@@ -40,7 +42,7 @@ export default function AuthPage({ type }: { type: 'login' | 'signup' }) {
           }
           className='flex flex-col rounded-xl border border-black p-12 px-20 shadow-lg'
         >
-          <div className='flex h-[30px] flex-row space-x-5'>
+          <div className='flex h-[30px] flex-row justify-center space-x-5'>
             <button
               onClick={type !== 'login' ? () => router.push('/login') : undefined}
               type='button'
@@ -57,36 +59,25 @@ export default function AuthPage({ type }: { type: 'login' | 'signup' }) {
             </button>
           </div>
           {type === 'signup' && (
-            <div className='flex flex-col'>
+            <div className={fieldCSS}>
               <label htmlFor='username' className='mt-[30px] text-white'>
                 Username:
               </label>
-              <input
-                name='username'
-                type='username'
-                required
-                className='rounded-md border border-black bg-transparent'
-              />
+              <input name='username' type='username' required className={inputCSS} />
             </div>
           )}
-          <label htmlFor='email' className='mt-[15px] text-white'>
-            Email:
-          </label>
-          <input
-            name='email'
-            type='email'
-            required
-            className='rounded-md border border-black bg-transparent'
-          />
-          <label htmlFor='password' className='mt-[15px] text-white'>
-            Password:
-          </label>
-          <input
-            type='password'
-            name='password'
-            required
-            className='rounded-md border border-black bg-transparent'
-          />
+          <div className={fieldCSS}>
+            <label htmlFor='email' className='mt-[15px] text-white'>
+              Email:
+            </label>
+            <input name='email' type='email' required className={inputCSS} />
+          </div>
+          <div className={fieldCSS}>
+            <label htmlFor='password' className='mt-[15px] text-white'>
+              Password:
+            </label>
+            <input type='password' name='password' required className={inputCSS} />
+          </div>
           {error && <p className='mt-2 text-red-500'>{error}</p>}
           <button
             type='submit'
