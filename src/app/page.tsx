@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { UsersInTable } from '@/utils/UsersInTable';
+// import { UsersInTable } from '@/utils/UsersInTable';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import TopBar from '@/components/TopBar';
@@ -57,15 +57,33 @@ export default function Page() {
   });
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data, error }: UserResponse) => {
+    (async () => {
+      const supabase = createClient();
+      const { data, error }: UserResponse = await supabase.auth.getUser();
       if (error || !data?.user) {
         router.push('/login');
       } else {
         setUser(data.user);
-        UsersInTable(data.user);
+        const { data: existingUser } = await supabase
+          .from('users')
+          .select('id')
+          .eq('id', data.user.id)
+          .limit(1);
+
+        if (!existingUser || existingUser.length === 0) {
+          const { error: insertError } = await supabase.from('users').insert([
+            {
+              id: data.user.id,
+              email: data.user.email,
+              username: data.user.user_metadata?.username || null,
+            },
+          ]);
+          if (insertError) {
+            console.error('Insert error:', insertError);
+          }
+        }
       }
-    });
+    })();
   }, [router]);
 
   return (

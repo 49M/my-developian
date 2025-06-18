@@ -20,9 +20,12 @@ export async function updateSession(request: NextRequest) {
           supabaseResponse = NextResponse.next({
             request,
           });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
+          cookiesToSet.forEach(({ name, value, options }) => {
+            const cleanedValue = value.startsWith('base64-')
+              ? Buffer.from(value.slice(7), 'base64').toString('utf-8')
+              : value;
+            supabaseResponse.cookies.set(name, cleanedValue, options);
+          });
         },
       },
     }
