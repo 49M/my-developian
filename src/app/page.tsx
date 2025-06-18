@@ -19,8 +19,8 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Checkbox } from '@/components/ui/checkbox';
 import LearningCheckboxes from '@/components/LearningCheckboxes';
+import { UserResponse } from '@supabase/supabase-js';
 
 export default function Page() {
   const [user, setUser] = useState<any>(null);
@@ -58,7 +58,7 @@ export default function Page() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data, error }) => {
+    supabase.auth.getUser().then(({ data, error }: UserResponse) => {
       if (error || !data?.user) {
         router.push('/login');
       } else {
