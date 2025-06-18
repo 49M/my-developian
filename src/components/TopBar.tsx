@@ -69,7 +69,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
               />
             </svg>
           )}
-          <div className='h-[32px] w-[32px] overflow-hidden rounded-full border'>
+          <div className='h-[32px] w-[32px] select-none overflow-hidden rounded-full border'>
             <Image
               src='https://jfl3tpwedr.ufs.sh/f/YBOUo9T9E7zyTts7rXNxDPOQlBuyG45sZF1wnrfoKHJvXT9U'
               alt='Uploaded Image'

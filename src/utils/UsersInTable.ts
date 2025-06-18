@@ -16,7 +16,6 @@ export async function UsersInTable(user: SupabaseUser) {
   const supabase = createClient(); // Use your app's client
 
   const { data, error } = await supabase.from('users').select('id').eq('id', user.id).single();
-  console.log('data:', data);
 
   if (!data) {
     console.log('Inserting new user');
