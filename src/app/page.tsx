@@ -22,6 +22,29 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import LearningCheckboxes from '@/components/LearningCheckboxes';
 import { UserResponse } from '@supabase/supabase-js';
 
+async function handleSubmit() {
+  const userMessage = [
+    {
+      role: 'system',
+      content: 'respond concisely (under 20 words) and start your message with "Hello world!"',
+    },
+    { role: 'user', content: 'Introduce yourself' },
+  ];
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: userMessage }),
+    });
+    if (!response.ok) throw new Error('No response from API.');
+    const { messages: aiMessage } = await response.json();
+    console.log(aiMessage);
+  } catch (error) {
+    console.error('Failed to get response:', error);
+  }
+  console.log('Submitted!');
+}
+
 export default function Page() {
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
@@ -125,7 +148,7 @@ export default function Page() {
             Skill
           </button>
         </div>
-        <form className='mb-[50px] mt-[50px] justify-center'>
+        <form className='mb-[50px] mt-[50px] justify-center' onSubmit={() => handleSubmit()}>
           <h2 className='mb-2'>What end-result do you hope to achieve? (be specific)</h2>
           <Textarea
             className={`shadow-m w-[600px] ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
@@ -211,10 +234,14 @@ export default function Page() {
           </div>
           <button
             className={`p mt-12 rounded-lg bg-blue-400/50 px-4 py-1 ${mode === 'light' ? 'border-black' : ''}`}
+            type='submit'
           >
             Get Roadmap
           </button>
         </form>
+        <button className='mb-[50px] bg-pink-200' onClick={handleSubmit}>
+          get results
+        </button>
       </div>
       <h1 className='text-xl font-bold'></h1>
     </div>
