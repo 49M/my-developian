@@ -239,9 +239,6 @@ export default function Page() {
             Get Roadmap
           </button>
         </form>
-        <button className='mb-[50px] bg-pink-200' onClick={handleSubmit}>
-          get results
-        </button>
       </div>
       <h1 className='text-xl font-bold'></h1>
     </div>

@@ -12,7 +12,7 @@ export async function signup(formData: FormData) {
     return data;
   }
 
-  const { error: authError, data: authData } = await supabase.auth.signUp({
+  const { error: authError } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
     options: {
@@ -22,16 +22,6 @@ export async function signup(formData: FormData) {
   if (authError) {
     return { error: 'Sign-up failed. Please check your credentials' };
   }
-  // const userId = authData?.user?.id;
-  // const { error: insertError } = await supabase.from('users').insert({
-  //   id: userId,
-  //   email: data.email,
-  //   username: data.username,
-  // });
-  // if (insertError) {
-  //   console.log(insertError);
-  //   return { error: 'Failed to save user' };
-  // }
   revalidatePath('/', 'layout');
   redirect('/confirm-email');
 }
