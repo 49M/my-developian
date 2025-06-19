@@ -79,7 +79,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
           </div>
           <button
             onClick={() => signOut()}
-            className='select-none rounded border px-[5px] font-manrope text-[14px]'
+            className={`select-none rounded border px-[5px] text-center font-manrope text-[14px] ${mode === 'light' ? 'border-black' : 'border-white'}`}
           >
             Sign Out
           </button>
