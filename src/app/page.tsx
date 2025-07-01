@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 // import { UsersInTable } from '@/utils/UsersInTable';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -21,14 +21,31 @@ import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import LearningCheckboxes from '@/components/LearningCheckboxes';
 import { UserResponse } from '@supabase/supabase-js';
+import { set } from 'date-fns';
 
-async function handleSubmit() {
+interface GoalData {
+  goalType: string;
+  endResult: string;
+  successCriteria: string;
+  startPoint: string;
+  commitTime: string;
+  date: Date | undefined;
+  learningStyles: Record<string, boolean>;
+}
+
+async function handleSubmit(data: GoalData) {
   const userMessage = [
     {
-      role: 'system',
-      content: 'respond concisely (under 20 words) and start your message with "Hello world!"',
+      role: 'user',
+      content: `User input data:
+              Goal Type: ${data.goalType}
+              Desired End Result: ${data.endResult}
+              How the user measures there success / what success will look like for the user: ${data.successCriteria}
+              Users relevent skills and experience related to this goal: ${data.startPoint}
+              The amount of time (per week) which the user can devote to working towards this goal: ${data.commitTime}
+              Date: ${data.date ? data.date.toLocaleDateString() : 'Not specified'}
+              Learning Styles: ${Object.entries(data.learningStyles)}`,
     },
-    { role: 'user', content: 'Introduce yourself' },
   ];
   try {
     const response = await fetch('/api/chat', {
@@ -78,6 +95,10 @@ export default function Page() {
     'Building with others/community': false,
     'AI Tutors': false,
   });
+  const [endResult, setEndResult] = useState<string>('');
+  const [successCriteria, setSuccessCriteria] = useState<string>('');
+  const [startPoint, setStartPoint] = useState<string>('');
+  const [commitTime, setCommitTime] = useState<string>('');
 
   useEffect(() => {
     (async () => {
@@ -148,16 +169,31 @@ export default function Page() {
             Skill
           </button>
         </div>
-        <form className='mb-[50px] mt-[50px] justify-center' onSubmit={() => handleSubmit()}>
+        <form
+          className='mb-[50px] mt-[50px] flex flex-col justify-center'
+          onSubmit={() =>
+            handleSubmit({
+              goalType,
+              endResult,
+              successCriteria,
+              startPoint,
+              commitTime,
+              date,
+              learningStyles,
+            } as GoalData)
+          }
+        >
           <h2 className='mb-2'>What end-result do you hope to achieve? (be specific)</h2>
           <Textarea
-            className={`shadow-m w-[600px] ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
+            className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
             placeholder='Enter desired outcome'
+            onChange={(e) => setEndResult(e.target.value)}
           />
           <h2 className='mb-2 mt-8'>What does succeeding with this goal look like for you?</h2>
           <Input
-            className={`shadow-m w-[600px] ${mode === 'light' ? 'border-black' : 'border-white'}`}
+            className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'}`}
             placeholder='Enter your success criteria'
+            onChange={(e) => setSuccessCriteria(e.target.value)}
           />
           <h2 className='mb-2 mt-8'>
             What is your starting point (current level of experience) in relation to this goal?
@@ -177,15 +213,16 @@ export default function Page() {
             ))}
           </div>
           <Textarea
-            className={`shadow-m w-[600px] ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
+            className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
             placeholder='Enter current skills & relevent experience'
+            onChange={(e) => setStartPoint(e.target.value)}
           />
           <h2 className='mb-2 mt-8'>How much time can you commit per week?</h2>
-          <Select>
+          <Select onValueChange={(value) => setCommitTime(value)}>
             <SelectTrigger
-              className={`h-[33px] w-[150px] ${mode === 'light' ? 'border-black' : 'border-white'}`}
+              className={`h-[33px] w-[150px] select-none ${mode === 'light' ? 'border-black' : 'border-white'}`}
             >
-              <SelectValue placeholder='Hours' />
+              <SelectValue placeholder='Hours' className='select-none' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='< 1 hr'>&lt;&nbsp;1 hr</SelectItem>
@@ -224,6 +261,8 @@ export default function Page() {
                     setDate(date);
                     setOpen(false);
                   }}
+                  startMonth={new Date(2025, 0)}
+                  endMonth={new Date(2050, 11)}
                 />
               </PopoverContent>
             </Popover>
