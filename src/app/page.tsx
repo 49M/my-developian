@@ -153,7 +153,7 @@ export default function Page() {
         </span>
       </h1>
       <div className='mt-[80px] flex w-full flex-col items-center justify-center'>
-        <h3 className='font-[17px]'>What type of milestone do you want to achieve?</h3>
+        <h3 className='text-[17px]'>What type of milestone do you want to achieve?</h3>
         <div
           className={`mt-[15px] flex space-x-1 rounded-lg border p-1 ${mode === 'light' ? 'border-black bg-white/20 shadow-sm' : 'border-gray-300 bg-gray-800/30'}`}
         >
