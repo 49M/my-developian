@@ -27,6 +27,7 @@ interface GoalData {
   goalType: string;
   endResult: string;
   successCriteria: string;
+  selectedLVL: string;
   startPoint: string;
   commitTime: string;
   date: Date | undefined;
@@ -41,6 +42,7 @@ async function handleSubmit(data: GoalData) {
               Goal Type: ${data.goalType}
               Desired End Result: ${data.endResult}
               How the user measures there success / what success will look like for the user: ${data.successCriteria}
+              User's current skill level / experience time: ${data.selectedLVL}
               Users relevent skills and experience related to this goal: ${data.startPoint}
               The amount of time (per week) which the user can devote to working towards this goal: ${data.commitTime}
               Date: ${data.date ? data.date.toLocaleDateString() : 'Not specified'}
@@ -176,6 +178,7 @@ export default function Page() {
               goalType,
               endResult,
               successCriteria,
+              selectedLVL,
               startPoint,
               commitTime,
               date,
@@ -261,8 +264,8 @@ export default function Page() {
                     setDate(date);
                     setOpen(false);
                   }}
-                  startMonth={new Date(2025, 0)}
-                  endMonth={new Date(2050, 11)}
+                  startMonth={new Date()}
+                  endMonth={new Date(2070, 11)}
                 />
               </PopoverContent>
             </Popover>
