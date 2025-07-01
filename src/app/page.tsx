@@ -144,8 +144,13 @@ export default function Page() {
         mode={mode}
         changeMode={setMode}
       />
-      <h1 className='mt-[80px] flex justify-center text-[45px] font-bold'>
-        Your Ultimate Path from&nbsp;<b>0</b>&nbsp;to&nbsp;<b>100</b>
+      <h1 className='mt-[80px] flex flex-wrap justify-center text-center text-[45px] font-bold leading-tight'>
+        <span>
+          Your Ultimate Path from&nbsp;
+          <span className='whitespace-nowrap'>
+            <b>0</b>&nbsp;to&nbsp;<b>100</b>
+          </span>
+        </span>
       </h1>
       <div className='mt-[80px] flex w-full flex-col items-center justify-center'>
         <h3 className='font-medium'>What type of milestone do you want to achieve?</h3>
@@ -205,7 +210,7 @@ export default function Page() {
             {levels.map(({ name, label }) => (
               <button
                 key={name}
-                className={`${skillLvLCSS} ${name === selectedLVL ? `${mode === 'light' ? 'bg-blue-300/70' : 'bg-blue-500/70'}` : ''}`}
+                className={`${skillLvLCSS} ${name === selectedLVL ? `${mode === 'light' ? 'bg-white/70' : 'bg-gray-800/90'}` : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   setSelectedLVL(name);

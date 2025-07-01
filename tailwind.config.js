@@ -66,6 +66,17 @@ module.exports = {
           'url(https://jfl3tpwedr.ufs.sh/f/YBOUo9T9E7zyI8mmv6gjnsYkgRy3lKFquJcZdLaTOP69AG1f)',
       },
     },
+    screens: {
+      xs: '400px',
+      ssm: '450px',
+      sm: '640px',
+      smd: '700px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+      '3xl': '1800px',
+    },
   },
   plugins: [require('tailwindcss-animate')],
 };

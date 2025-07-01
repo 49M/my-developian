@@ -1,5 +1,6 @@
 import { signOut } from '../app/(auth)/logout/actions';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface TopBarProps {
   name: string;
@@ -8,30 +9,44 @@ interface TopBarProps {
 }
 
 export default function TopBar({ name, mode, changeMode }: TopBarProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const dropdownMenuCSS =
+    'cursor-pointer px-4 py-[7px] font-manrope hover:bg-gray-200/70 hover:border-gray-300 hover:border rounded-xl';
   return (
     <div
-      className={`w-full border-b px-6 pb-3 pt-4 ${mode === 'light' ? 'border-black text-black' : 'border-white text-white'}`}
+      className={`ssm:px-6 w-full border-b px-3 pb-3 pt-4 ${mode === 'light' ? 'border-black text-black' : 'border-white text-white'}`}
     >
       <div className='flex w-full justify-between'>
         <div className='flex'>
           <h3
-            className={`mr-8 select-none border-r ${mode === 'light' ? 'border-black' : 'border-white'} pr-8 font-manrope text-[18px] font-bold`}
+            className={`ssm:mr-8 mr-4 select-none border-r ${mode === 'light' ? 'border-black' : 'border-white'} ssm:pr-8 pr-4 font-manrope text-[18px] font-bold`}
           >
             My Developian
           </h3>
-          <div className='flex space-x-6 pt-[3px]'>
-            <h3 className='font-manrope'>Roadmaps</h3>
-            <h3 className='font-manrope'>Calender</h3>
-            <h3 className='font-manrope'>Progress</h3>
+          <div className='smd:flex hidden space-x-6 pt-[3px]'>
+            <h3 className='cursor-pointer font-manrope'>Roadmaps</h3>
+            <h3 className='cursor-pointer font-manrope'>Calender</h3>
+            <h3 className='cursor-pointer font-manrope'>Progress</h3>
           </div>
+          <button
+            className='smd:hidden flex flex-col justify-center space-y-[4px]'
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label='Toggle navigation'
+          >
+            <span className={`h-[2.5px] w-[22px] ${mode === 'light' ? 'bg-black' : 'bg-white'}`} />
+            <span className={`h-[2.5px] w-[22px] ${mode === 'light' ? 'bg-black' : 'bg-white'}`} />
+            <span className={`h-[2.5px] w-[22px] ${mode === 'light' ? 'bg-black' : 'bg-white'}`} />
+          </button>
         </div>
-        <div className='absolute left-1/2 mt-[4px] -translate-x-1/2'>
-          <h3 className='font-manrope text-[17px] font-medium'>Welcome, {name}</h3>
+        <div className='absolute left-[60%] mt-[4px] -translate-x-[60%] xl:left-1/2 xl:-translate-x-1/2'>
+          <h3 className='hidden select-none font-manrope text-[17px] font-medium lg:flex'>
+            Welcome, {name}
+          </h3>
         </div>
-        <div className='flex space-x-5'>
+        <div className='ssm:space-x-5 flex space-x-2'>
           {mode === 'dark' && (
             <svg
-              className='mt-[5.5px] h-6 w-6 text-gray-800 dark:text-white'
+              className='mt-[5.5px] h-6 w-6 cursor-pointer text-gray-800 dark:text-white'
               aria-hidden='true'
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -51,7 +66,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
           )}
           {mode === 'light' && (
             <svg
-              className='mt-[5.5px] h-6 w-6 text-gray-800 dark:text-white'
+              className='mt-[5.5px] h-6 w-6 cursor-pointer text-gray-800 dark:text-white'
               aria-hidden='true'
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -69,7 +84,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
               />
             </svg>
           )}
-          <div className='h-[32px] w-[32px] select-none overflow-hidden rounded-full border'>
+          <div className='h-[32px] w-[32px] cursor-pointer select-none overflow-hidden rounded-full border'>
             <Image
               src='https://jfl3tpwedr.ufs.sh/f/YBOUo9T9E7zyTts7rXNxDPOQlBuyG45sZF1wnrfoKHJvXT9U'
               alt='Uploaded Image'
@@ -79,12 +94,25 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
           </div>
           <button
             onClick={() => signOut()}
-            className={`select-none rounded border px-[5px] text-center font-manrope text-[14px] ${mode === 'light' ? 'border-black' : 'border-white'}`}
+            className={`cursor-pointer select-none rounded border px-[5px] text-center font-manrope text-[14px] ${mode === 'light' ? 'border-black hover:bg-white/70' : 'border-white hover:bg-gray-800/90'}`}
           >
             Sign Out
           </button>
         </div>
       </div>
+      {menuOpen && (
+        <div
+          className={`smd:hidden absolute mt-[12px] flex w-[93%] flex-col rounded-xl ${
+            mode === 'light'
+              ? 'border-black bg-white/95 text-black'
+              : 'border-white bg-gray-900/95 text-white'
+          }`}
+        >
+          <h3 className={dropdownMenuCSS}>Roadmaps</h3>
+          <h3 className={dropdownMenuCSS}>Calendar</h3>
+          <h3 className={dropdownMenuCSS}>Progress</h3>
+        </div>
+      )}
     </div>
   );
 }
