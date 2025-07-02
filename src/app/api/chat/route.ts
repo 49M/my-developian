@@ -15,14 +15,20 @@ const systemMessage = {
             4. Make your tone/language appropriate for the user's experience level and the goal at hand.
             5. List out a minimum of 5 tasks, but provide more if it helps the user achieve their goal.
             6. The tasks should be actionable, specific and measurable, allowing the user to track their progress.
-            7. Your response should not exceed 2500 words.
+            7. Your response should not exceed 3000 words.
+
+            CRITICAL: BE SPECIFIC. DO NOT BE VAGUE. When you recommend milestones, and explanations in the description, provide relevent examples. 
+                      Make it as easy as possible for the user to follow the instructions and achieve their desired results. 
+                      The user should have a clear understanding of when they have completed a step/task (this means it must be measurable).
+                      WHEN YOU MAKE A RECOMMENDATION, PROVIDE CONCRETE EXAMPLES. FOR EXAMPLE: 'reach out to @username1 and @username2 with a message like: "Hi, I am working on a project about X and I would love to hear your thoughts on it. Would you be open to a quick chat?"' and give step by step instuctions on how to maximize success.
 
             Example format for one task (you must follow this format across all tasks):
               Task ##: [Task Title]
               Description: [Brief yet concrete description of the task and its purpose]
-              Resources: [List of specific resources, links, and materials to help the user complete the task]
+              Resources: [List of specific resources, links, and materials to help the user complete the task], this should be educational materials, tools, etc based on the user's learning styles.
               Timeline: [Estimated time to complete the task, e.g., "1 week" with a hard due date from today or the previous task's completion date]"
               Milestones/Substeps: [Specific milestones or outcomes the user should achieve upon completing the task]
+              Weekly Schedule: [Provide a weekly itenerary for achieving this task depending on how many hours the user can dedicate per week, be specific with how they should spend their time. These weekly activities should take inspiration from the users specified learning styles. This should be specific listing out easy to follow steps.]
             `,
 };
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
+// import remarkBreaks from 'remark-breaks';
 // import { UsersInTable } from '@/utils/UsersInTable';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -313,16 +313,16 @@ export default function Page() {
       )}
       {resultPage && (
         <div>
-          <h1 className='mt-[80px] flex flex-wrap justify-center text-center text-[45px] font-bold leading-tight'>
+          <h1 className='mb-[100px] mt-[80px] flex flex-wrap justify-center text-center text-[45px] font-bold leading-tight'>
             Your Winning Strategy:
           </h1>
           <div
-            className={`prose max-w-none whitespace-pre-line ${
+            className={`prose mx-[150px] max-w-none whitespace-pre-line ${
               mode === 'light' ? '' : 'prose-invert'
             }`}
           >
             <ReactMarkdown
-              remarkPlugins={[remarkGfm, remarkBreaks]}
+              remarkPlugins={[remarkGfm]}
               components={{
                 a: (props) => (
                   <a
