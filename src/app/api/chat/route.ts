@@ -1,5 +1,5 @@
 import { cohere } from '@/utils/cohere';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
 const systemMessage = {
   role: 'system',
@@ -26,13 +26,17 @@ const systemMessage = {
             `,
 };
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const { messages } = await req.json();
   const allMessages = [systemMessage, ...messages];
   const response = await cohere.chat({
     model: 'command-a-03-2025',
     messages: allMessages,
   });
-  console.log(response);
-  return NextResponse.json({ messages: response.message.content });
+  console.log(response.message.content);
+  // return NextResponse.json({ messages: response.message.content });
+  const content = Array.isArray(response.message.content)
+    ? response.message.content.map((seg: { text: string }) => seg.text).join('')
+    : response.message.content;
+  return NextResponse.json({ message: content });
 }

@@ -80,5 +80,5 @@ module.exports = {
       '3xl': '1800px',
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 };

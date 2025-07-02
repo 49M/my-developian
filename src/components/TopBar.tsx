@@ -1,6 +1,8 @@
+'use client';
 import { signOut } from '../app/(auth)/logout/actions';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface TopBarProps {
   name: string;
@@ -9,6 +11,7 @@ interface TopBarProps {
 }
 
 export default function TopBar({ name, mode, changeMode }: TopBarProps) {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownMenuCSS =
     'cursor-pointer px-4 py-[7px] font-manrope hover:bg-gray-200/70 hover:border-gray-300 hover:border rounded-xl';
@@ -24,9 +27,24 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
             My Developian
           </h3>
           <div className='smd:flex hidden space-x-6 pt-[3px]'>
-            <h3 className='cursor-pointer font-manrope'>Roadmaps</h3>
-            <h3 className='cursor-pointer font-manrope'>Calender</h3>
-            <h3 className='cursor-pointer font-manrope'>Progress</h3>
+            <h3
+              className='cursor-pointer font-manrope'
+              onClick={() => router.push('/pages/roadmaps')}
+            >
+              Roadmaps
+            </h3>
+            <h3
+              className='cursor-pointer font-manrope'
+              onClick={() => router.push('/pages/calender')}
+            >
+              Calender
+            </h3>
+            <h3
+              className='cursor-pointer font-manrope'
+              onClick={() => router.push('/pages/progress')}
+            >
+              Progress
+            </h3>
           </div>
           <button
             className='smd:hidden flex flex-col justify-center space-y-[4px]'
