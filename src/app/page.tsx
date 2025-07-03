@@ -24,17 +24,33 @@ import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import LearningCheckboxes from '@/components/LearningCheckboxes';
 import { UserResponse } from '@supabase/supabase-js';
-import { set } from 'date-fns';
 
 interface GoalData {
-  goalType: string;
+  goalType: 'life' | 'career' | 'skill';
   endResult: string;
   successCriteria: string;
-  selectedLVL: string;
+  selectedLVL: '0-1' | '1-3' | '3+';
   startPoint: string;
-  commitTime: string;
+  commitTime:
+    | '< 1 hr'
+    | '1 - 5 hrs'
+    | '5 - 10 hrs'
+    | '10 - 15 hrs'
+    | '15 - 20 hrs'
+    | '20 - 30 hrs'
+    | '30 - 40 hrs'
+    | '40 - 60 hrs'
+    | '60+ hrs';
   date: Date | undefined;
-  learningStyles: Record<string, boolean>;
+  learningStyles: Record<
+    | 'hands-on projects'
+    | 'step-by-step tutorials'
+    | 'articles & documentation'
+    | 'video walkthroughs'
+    | 'building with community'
+    | 'AI tutors',
+    boolean
+  >;
 }
 
 async function handleSubmit(
@@ -44,6 +60,33 @@ async function handleSubmit(
   setAiResponse: (value: string) => void
 ) {
   e.preventDefault();
+  const supabase = createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) throw new Error('User not authenticated');
+  // Save user prompt to the db
+  const response = await fetch('/api/user_prompts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({
+      goal_type: data.goalType,
+      end_result: data.endResult,
+      success_criteria: data.successCriteria,
+      experience_lvl: data.selectedLVL,
+      starting_point: data.startPoint,
+      commit_time: data.commitTime,
+      due_date: data.date ? data.date.toISOString() : null,
+      learning_styles: data.learningStyles,
+    }),
+    // credentials: 'include',
+  });
+  const result = await response.json();
+  console.log('User prompt saved:', result);
+  // Open AI API call
   const userMessage = [
     {
       role: 'user',
@@ -76,39 +119,39 @@ async function handleSubmit(
 }
 
 export default function Page() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserResponse['data']['user'] | null>(null);
   const router = useRouter();
   const [resultPage, setResultPage] = useState<boolean>(false);
   const [aiResponse, setAiResponse] = useState<string>('');
   const [mode, setMode] = useState<string>('light');
-  const [goalType, setGoalType] = useState<string>('Career');
+  const [goalType, setGoalType] = useState<string>('career');
   const goalTypeCSS = `border w-[100px] py-[2px] rounded-md ${mode === 'light' ? 'border-neutral-600 shadow-sm' : ''}`;
   const skillLvLCSS = `h-[22px] w-[90px] rounded-lg border ${mode === 'light' ? 'border-black' : 'border-white'} shadow`;
   const [selectedLVL, setSelectedLVL] = useState<string>('');
   const levels = [
     {
       name: 'lvl 1',
-      label: goalType === 'Skill' ? 'Beginner' : goalType === 'Career' ? '0 - 1 Years' : 'Zero',
+      label: goalType === 'skill' ? 'Beginner' : goalType === 'career' ? '0 - 1 Years' : 'Zero',
     },
     {
       name: 'lvl 2',
       label:
-        goalType === 'Skill' ? 'Intermediate' : goalType === 'Career' ? '1 - 3 Years' : 'Familiar',
+        goalType === 'skill' ? 'Intermediate' : goalType === 'career' ? '1 - 3 Years' : 'Familiar',
     },
     {
       name: 'lvl 3',
-      label: goalType === 'Skill' ? 'Advanced' : goalType === 'Career' ? '3+ Years' : 'Proficient',
+      label: goalType === 'skill' ? 'Advanced' : goalType === 'career' ? '3+ Years' : 'Proficient',
     },
   ];
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
   const [learningStyles, setLearningStyles] = useState<Record<string, boolean>>({
-    'Hands-on projects': false,
-    'Step-by-step tutorials': false,
-    'Articles & documentation': false,
-    'Video walkthroughs': false,
-    'Building with others/community': false,
-    'AI Tutors': false,
+    'hands-on projects': false,
+    'step-by-step tutorials': false,
+    'articles & documentation': false,
+    'video walkthroughs': false,
+    'building with community': false,
+    'AI tutors': false,
   });
   const [endResult, setEndResult] = useState<string>('');
   const [successCriteria, setSuccessCriteria] = useState<string>('');
@@ -173,26 +216,26 @@ export default function Page() {
               className={`mt-[15px] flex space-x-1 rounded-lg border p-1 ${mode === 'light' ? 'border-black bg-white/20 shadow-sm' : 'border-gray-300 bg-gray-800/30'}`}
             >
               <button
-                className={`${goalTypeCSS} ${goalType === 'Life' ? (mode === 'light' ? 'bg-white/70' : 'border-white bg-gray-800/90') : 'border-gray-400'}`}
-                onClick={() => setGoalType('Life')}
+                className={`${goalTypeCSS} ${goalType === 'life' ? (mode === 'light' ? 'bg-white/70' : 'border-white bg-gray-800/90') : 'border-gray-400'}`}
+                onClick={() => setGoalType('life')}
               >
                 Life
               </button>
               <button
-                className={`${goalTypeCSS} ${goalType === 'Career' ? (mode === 'light' ? 'bg-white/70' : 'border-white bg-gray-800/90') : 'border-gray-400'}`}
-                onClick={() => setGoalType('Career')}
+                className={`${goalTypeCSS} ${goalType === 'career' ? (mode === 'light' ? 'bg-white/70' : 'border-white bg-gray-800/90') : 'border-gray-400'}`}
+                onClick={() => setGoalType('career')}
               >
                 Career
               </button>
               <button
-                className={`${goalTypeCSS} ${goalType === 'Skill' ? (mode === 'light' ? 'bg-white/70' : 'bg-gray-800/90') : 'border-gray-400'}`}
-                onClick={() => setGoalType('Skill')}
+                className={`${goalTypeCSS} ${goalType === 'skill' ? (mode === 'light' ? 'bg-white/70' : 'bg-gray-800/90') : 'border-gray-400'}`}
+                onClick={() => setGoalType('skill')}
               >
                 Skill
               </button>
             </div>
             <form
-              className='max-xs:w-[350px] max-bxs:w-[370px] max-sml:w-[400px] mb-[50px] mt-[50px] flex flex-col justify-center max-md:w-[600px] max-sm:w-[500px]'
+              className='mb-[50px] mt-[50px] flex flex-col justify-center max-md:w-[600px] max-sm:w-[500px] max-sml:w-[400px] max-bxs:w-[370px] max-xs:w-[350px]'
               onSubmit={(e) =>
                 handleSubmit(
                   e,
@@ -319,7 +362,7 @@ export default function Page() {
           <div
             className={`prose mx-[150px] max-w-none whitespace-pre-line ${
               mode === 'light' ? '' : 'prose-invert'
-            }`}
+            } [&_li]:my-1 [&_p]:my-2`}
           >
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
