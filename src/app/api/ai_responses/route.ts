@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
-export async function GET({ params }: { params: { prompt_id: string } }) {
+export async function GET(req: Request) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -10,7 +10,11 @@ export async function GET({ params }: { params: { prompt_id: string } }) {
   if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const promptId = params.prompt_id;
+  const url = new URL(req.url);
+  const promptId = url.searchParams.get('prompt_id');
+  if (!promptId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 400 });
+  }
   const { data: userPrompt, error: promptError } = await supabase
     .from('user_prompts')
     .select('id')
@@ -44,6 +48,21 @@ export async function POST(req: Request) {
   }
   const body = await req.json();
   const { prompt_id, message } = body;
+
+  if (!prompt_id || !message) {
+    return NextResponse.json({ error: 'Invalid ai response post' }, { status: 400 });
+  }
+
+  const { data: userPrompt, error: promptError } = await supabase
+    .from('user_prompts')
+    .select('id')
+    .eq('id', prompt_id)
+    .eq('user_id', user.id)
+    .single();
+
+  if (promptError || !userPrompt) {
+    return NextResponse.json({ error: 'Unauthorized prompt access' }, { status: 403 });
+  }
 
   const { data, error } = await supabase.from('ai_responses').insert({
     prompt_id: prompt_id,
