@@ -17,16 +17,16 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
     'cursor-pointer px-4 py-[7px] font-manrope hover:bg-gray-200/70 hover:border-gray-300 hover:border rounded-xl';
   return (
     <div
-      className={`ssm:px-6 w-full border-b px-3 pb-3 pt-4 ${mode === 'light' ? 'border-black text-black' : 'border-white text-white'}`}
+      className={`w-full border-b px-3 pb-3 pt-4 ssm:px-6 ${mode === 'light' ? 'border-black text-black' : 'border-white text-white'}`}
     >
       <div className='flex w-full justify-between'>
         <div className='flex'>
           <h3
-            className={`ssm:mr-8 mr-4 select-none border-r ${mode === 'light' ? 'border-black' : 'border-white'} ssm:pr-8 pr-4 font-manrope text-[18px] font-bold`}
+            className={`mr-4 select-none border-r ssm:mr-8 ${mode === 'light' ? 'border-black' : 'border-white'} pr-4 font-manrope text-[18px] font-bold ssm:pr-8`}
           >
             My Developian
           </h3>
-          <div className='smd:flex hidden space-x-6 pt-[3px]'>
+          <div className='hidden space-x-6 pt-[3px] smd:flex'>
             <h3
               className='cursor-pointer font-manrope'
               onClick={() => router.push('/pages/roadmaps')}
@@ -47,7 +47,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
             </h3>
           </div>
           <button
-            className='smd:hidden flex flex-col justify-center space-y-[4px]'
+            className='flex flex-col justify-center space-y-[4px] smd:hidden'
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label='Toggle navigation'
           >
@@ -61,7 +61,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
             Welcome, {name}
           </h3>
         </div>
-        <div className='ssm:space-x-5 flex space-x-2'>
+        <div className='flex space-x-2 ssm:space-x-5'>
           {mode === 'dark' && (
             <svg
               className='mt-[5.5px] h-6 w-6 cursor-pointer text-gray-800 dark:text-white'
@@ -120,7 +120,7 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
       </div>
       {menuOpen && (
         <div
-          className={`smd:hidden absolute mt-[12px] flex w-[93%] flex-col rounded-xl ${
+          className={`absolute mt-[12px] flex w-[93%] flex-col rounded-xl smd:hidden ${
             mode === 'light'
               ? 'border-black bg-white/95 text-black'
               : 'border-white bg-gray-900/95 text-white'

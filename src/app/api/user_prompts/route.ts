@@ -86,17 +86,21 @@ export async function POST(req: Request) {
     due_date,
     learning_styles,
   } = validated;
-  const { data, error } = await supabase.from('user_prompts').insert({
-    user_id: user.id,
-    goal_type,
-    end_result,
-    success_criteria,
-    experience_lvl,
-    starting_point,
-    commit_time,
-    due_date,
-    learning_styles,
-  });
+  const { data, error } = await supabase
+    .from('user_prompts')
+    .insert({
+      user_id: user.id,
+      goal_type,
+      end_result,
+      success_criteria,
+      experience_lvl,
+      starting_point,
+      commit_time,
+      due_date,
+      learning_styles,
+    })
+    .select()
+    .single();
   if (error) return NextResponse.json({ error: 'Failed to create user prompt' }, { status: 500 });
-  return NextResponse.json({ success: true, data });
+  return NextResponse.json({ success: true, prompt_id: data.id, data });
 }

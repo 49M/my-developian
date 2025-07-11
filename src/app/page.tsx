@@ -85,6 +85,8 @@ async function handleSubmit(
     // credentials: 'include',
   });
   const result = await response.json();
+  const promptId = result.prompt_id;
+  if (!promptId) throw new Error('Prompt failed to save');
   console.log('User prompt saved:', result);
   // Open AI API call
   const userMessage = [
@@ -111,6 +113,16 @@ async function handleSubmit(
     const { message } = await response.json();
     console.log(message);
     setAiResponse(message);
+    const postResponse = await fetch('/api/ai_responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ prompt_id: promptId, message: message }),
+    });
+    const result = await postResponse.json();
+    console.log('AI response saved', result);
     setResultPage(true);
   } catch (error) {
     console.error('Failed to get response:', error);
@@ -297,7 +309,7 @@ export default function Page() {
                 >
                   <SelectValue placeholder='Hours' className='select-none' />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className='bg-white/95'>
                   <SelectItem value='< 1 hr'>&lt;&nbsp;1 hr</SelectItem>
                   <SelectItem value='1 - 5 hrs'>1 - 5 hrs</SelectItem>
                   <SelectItem value='5 - 10 hrs'>5 - 10 hrs</SelectItem>
@@ -325,7 +337,7 @@ export default function Page() {
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className='w-auto overflow-hidden p-0' align='start'>
+                  <PopoverContent className='w-auto overflow-hidden bg-white/95 p-0' align='start'>
                     <Calendar
                       mode='single'
                       selected={date}
