@@ -61,8 +61,18 @@ export async function POST(req: Request) {
     ),
   });
   let validated;
+  console.log(body);
   try {
-    validated = schema.parse(body);
+    validated = schema.parse({
+      goal_type: body.goalType,
+      end_result: body.endResult,
+      success_criteria: body.successCriteria,
+      experience_lvl: body.selectedLVL,
+      starting_point: body.startPoint,
+      commit_time: body.commitTime.trim(),
+      due_date: body.date ? new Date(body.date).toISOString() : '',
+      learning_styles: body.learningStyles,
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

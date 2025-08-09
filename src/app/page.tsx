@@ -24,40 +24,26 @@ import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import LearningCheckboxes from '@/components/LearningCheckboxes';
 import { UserResponse } from '@supabase/supabase-js';
-
-interface GoalData {
-  goalType: 'life' | 'career' | 'skill';
-  endResult: string;
-  successCriteria: string;
-  selectedLVL: '0-1' | '1-3' | '3+';
-  startPoint: string;
-  commitTime:
-    | '< 1 hr'
-    | '1 - 5 hrs'
-    | '5 - 10 hrs'
-    | '10 - 15 hrs'
-    | '15 - 20 hrs'
-    | '20 - 30 hrs'
-    | '30 - 40 hrs'
-    | '40 - 60 hrs'
-    | '60+ hrs';
-  date: Date | undefined;
-  learningStyles: Record<
-    | 'hands-on projects'
-    | 'step-by-step tutorials'
-    | 'articles & documentation'
-    | 'video walkthroughs'
-    | 'building with community'
-    | 'AI tutors',
-    boolean
-  >;
-}
+import { GoalInputProps } from '@/types';
+import useRoadmap from '@/hooks/useRoadmap';
+import useSaveInputs from '@/hooks/useSaveInputs';
+import useSaveResponse from '@/hooks/useSaveResponse';
 
 async function handleSubmit(
   e: React.FormEvent,
-  data: GoalData,
+  data: GoalInputProps,
   setResultPage: (value: boolean) => void,
-  setAiResponse: (value: string) => void
+  setAiResponse: (value: string) => void,
+  saveInputs: (
+    session: any,
+    input: GoalInputProps
+  ) => Promise<{ success: boolean; prompt_id: number; data: any }>,
+  generateRoadmap: (session: any, input: GoalInputProps) => Promise<{ roadmap: string }>,
+  saveResponse: (
+    session: any,
+    message: string,
+    prompt_id: number
+  ) => Promise<{ success: boolean; data: any }>
 ) {
   e.preventDefault();
   const supabase = createClient();
@@ -65,63 +51,18 @@ async function handleSubmit(
     data: { session },
   } = await supabase.auth.getSession();
   if (!session) throw new Error('User not authenticated');
-  // Save user prompt to the db
-  const response = await fetch('/api/user_prompts', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-    },
-    body: JSON.stringify({
-      goal_type: data.goalType,
-      end_result: data.endResult,
-      success_criteria: data.successCriteria,
-      experience_lvl: data.selectedLVL,
-      starting_point: data.startPoint,
-      commit_time: data.commitTime,
-      due_date: data.date ? data.date.toISOString() : null,
-      learning_styles: data.learningStyles,
-    }),
-    // credentials: 'include',
-  });
-  const result = await response.json();
-  const promptId = result.prompt_id;
+  const response = await saveInputs(session, data);
+  const promptId = response.prompt_id;
   if (!promptId) throw new Error('Prompt failed to save');
-  console.log('User prompt saved:', result);
-  // Open AI API call
-  const userMessage = [
-    {
-      role: 'user',
-      content: `User input data:
-              Goal Type: ${data.goalType}
-              Desired End Result: ${data.endResult}
-              How the user measures there success / what success will look like for the user: ${data.successCriteria}
-              User's current skill level / experience time: ${data.selectedLVL}
-              Users relevent skills and experience related to this goal: ${data.startPoint}
-              The amount of time (per week) which the user can devote to working towards this goal: ${data.commitTime}
-              Date: ${data.date ? data.date.toLocaleDateString() : 'Not specified'}
-              Learning Styles: ${Object.entries(data.learningStyles)}`,
-    },
-  ];
+  console.log('User prompt saved:', response);
   try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: userMessage }),
-    });
-    if (!response.ok) throw new Error('No response from API.');
-    const { message } = await response.json();
+    const roadmapResponse = await generateRoadmap(session, data);
+    if (!roadmapResponse) throw new Error('Failed to generate roadmap');
+    const message = roadmapResponse?.roadmap;
     console.log(message);
     setAiResponse(message);
-    const postResponse = await fetch('/api/ai_responses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({ prompt_id: promptId, message: message }),
-    });
-    const result = await postResponse.json();
+    const postResponse = await saveResponse(session, message, promptId);
+    const result = await postResponse?.data;
     console.log('AI response saved', result);
     setResultPage(true);
   } catch (error) {
@@ -169,6 +110,9 @@ export default function Page() {
   const [successCriteria, setSuccessCriteria] = useState<string>('');
   const [startPoint, setStartPoint] = useState<string>('');
   const [commitTime, setCommitTime] = useState<string>('');
+  const { saveError, success, saveInputs } = useSaveInputs();
+  const { error, loading, roadmap, generateRoadmap } = useRoadmap();
+  const { saveResError, resSuccess, saveResponse } = useSaveResponse();
 
   useEffect(() => {
     (async () => {
@@ -260,9 +204,12 @@ export default function Page() {
                     commitTime,
                     date,
                     learningStyles,
-                  } as GoalData,
+                  } as GoalInputProps,
                   setResultPage,
-                  setAiResponse
+                  setAiResponse,
+                  saveInputs,
+                  generateRoadmap,
+                  saveResponse
                 )
               }
             >

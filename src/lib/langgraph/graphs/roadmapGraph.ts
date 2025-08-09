@@ -17,3 +17,13 @@
 //   const search = new TavilySearch();
 //   const query = ``;
 // });
+
+import { promptNode } from '../nodes/promptNode';
+import { cohereLLMNode } from '../nodes/cohereLLMNode';
+import { GoalInputProps } from '@/types';
+
+export async function roadmapGraph(input: GoalInputProps): Promise<string> {
+  const prompt = promptNode(input);
+  const roadmap = cohereLLMNode(prompt);
+  return roadmap;
+}
