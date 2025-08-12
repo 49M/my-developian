@@ -3,8 +3,8 @@ import { roadmapGraph } from '@/lib/langgraph/graphs/roadmapGraph';
 import type { GoalInputProps } from '@/types';
 
 export async function POST(req: NextRequest) {
-  const input: GoalInputProps = await req.json();
   try {
+    const input: GoalInputProps = await req.json();
     const roadmap = await roadmapGraph(input);
     return NextResponse.json({ roadmap: roadmap });
   } catch (err) {

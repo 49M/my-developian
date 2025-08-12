@@ -18,12 +18,35 @@
 //   const query = ``;
 // });
 
-import { promptNode } from '../nodes/promptNode';
-import { cohereLLMNode } from '../nodes/cohereLLMNode';
+// -----------------------------------------------------------------------------------
+
+// import { promptNode } from '../nodes/promptNode';
+// import { cohereLLMNode } from '../nodes/cohereLLMNode';
+// import { GoalInputProps } from '@/types';
+
+// export async function roadmapGraph(input: GoalInputProps): Promise<string> {
+//   const prompt = await promptNode(input);
+//   const roadmap = await cohereLLMNode(prompt);
+//   return roadmap;
+// }
+
+// ------------------------------------------------------------------------------------
+
+import { StateGraph } from '@langchain/langgraph';
+import { roadmapStateSchema } from '../state';
+import { generatePromptNode } from '../nodes/generatePromptNode';
+import { generateRoadmapNode } from '../nodes/generateRoadmapNode';
 import { GoalInputProps } from '@/types';
 
-export async function roadmapGraph(input: GoalInputProps): Promise<string> {
-  const prompt = promptNode(input);
-  const roadmap = cohereLLMNode(prompt);
-  return roadmap;
+const graph = new StateGraph(roadmapStateSchema)
+  .addNode('generatePrompt', generatePromptNode)
+  .addNode('generateRoadmap', generateRoadmapNode)
+  .addEdge('__start__', 'generatePrompt')
+  .addEdge('generatePrompt', 'generateRoadmap')
+  .addEdge('generateRoadmap', '__end__');
+
+export async function roadmapGraph(input: GoalInputProps) {
+  const compiledGraph = graph.compile();
+  const finalState = await compiledGraph.invoke({ goalInput: input });
+  return finalState.roadmap;
 }
