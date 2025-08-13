@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import type { GoalInputProps } from '@/types';
-import { ChatMessageV2 } from 'cohere-ai/api';
+import { ChatMessage } from '@langchain/core/messages';
 
 export const roadmapStateSchema = z.object({
   goalInput: z.custom<GoalInputProps>(),
-  prompt: z.custom<ChatMessageV2>(),
+  prompt: z.custom<ChatMessage>(),
   roadmap: z.string().optional(),
 });

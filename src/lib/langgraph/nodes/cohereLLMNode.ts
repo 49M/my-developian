@@ -1,9 +1,13 @@
-import { cohere } from '@/utils/cohere';
-import { ChatMessageV2 } from 'cohere-ai/api';
+import { ChatCohere } from '@langchain/cohere';
+import { SystemMessage, HumanMessage, AIMessage } from '@langchain/core/messages';
 
-const systemMessage: ChatMessageV2 = {
-  role: 'system',
-  content: `You are a helpful, world-class and highly experienced AI mentor which knows how to find information related to user goals and create high quality 
+const llm = new ChatCohere({
+  model: 'command-a-03-2025',
+  temperature: 0.4,
+});
+
+const systemMessage =
+  new SystemMessage(`You are a helpful, world-class and highly experienced AI mentor which knows how to find information related to user goals and create high quality 
 tailored plans to help users achieve their goals in the most effective way possible. You help users create a personalized learning and execution plan 
 based on their goals, preferences, and constraints. Based on user input data, you will generate a detailed roadmap plan that includes specific resources, 
 links, timelines, and milestones to guide users on achieving microgoals which simplify achieving the big goal.
@@ -29,21 +33,10 @@ Example format for one task (you must follow this format across all tasks):
   Timeline: [Estimated time to complete the task, e.g., "1 week" with a hard due date from today or the previous task's completion date]"
   Milestones/Substeps: [Specific milestones or outcomes the user should achieve upon completing the task]
   Weekly Schedule: [Provide a weekly itenerary for achieving this task depending on how many hours the user can dedicate per week, be specific with how they should spend their time. These weekly activities should take inspiration from the users specified learning styles. This should be specific listing out easy to follow steps.]
-`,
-};
+`);
 
-export async function cohereLLMNode(input: ChatMessageV2): Promise<string> {
-  const allMessages = [systemMessage, input];
-  const response = await cohere.chat({
-    model: 'command-a-03-2025',
-    messages: allMessages,
-    temperature: 0.5,
-  });
-  console.log(response.message.content);
-  const content = Array.isArray(response.message.content)
-    ? response.message.content.map((seg: { text: string }) => seg.text).join('')
-    : response.message.content
-      ? (response.message.content as string)
-      : '';
-  return content;
+export async function cohereLLMNode(input: HumanMessage): Promise<AIMessage> {
+  const messages = [systemMessage, input];
+  const res = await llm.invoke(messages);
+  return res;
 }
