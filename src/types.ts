@@ -1,7 +1,6 @@
 export interface GoalInputProps {
   goalType: 'life' | 'career' | 'skill';
   endResult: string;
-  successCriteria: string;
   selectedLVL: '0-1' | '1-3' | '3+';
   startPoint: string;
   commitTime:
@@ -16,12 +15,12 @@ export interface GoalInputProps {
     | '60+ hrs';
   date: Date | undefined;
   learningStyles: Record<
-    | 'hands-on projects'
-    | 'step-by-step tutorials'
-    | 'articles & documentation'
-    | 'video walkthroughs'
-    | 'building with community'
-    | 'AI tutors',
+    | 'Hands-on projects'
+    | 'Structured tutorials'
+    | 'Readng/writing'
+    | 'Videos'
+    | 'Peer/Community learning + growth'
+    | 'Guided Coaching/AI tutors',
     boolean
   >;
 }

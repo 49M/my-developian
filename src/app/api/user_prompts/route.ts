@@ -33,7 +33,6 @@ export async function POST(req: Request) {
   const schema = z.object({
     goal_type: z.enum(['life', 'career', 'skill']),
     end_result: z.string(),
-    success_criteria: z.string(),
     experience_lvl: z.string(),
     starting_point: z.string(),
     commit_time: z.enum([
@@ -50,12 +49,12 @@ export async function POST(req: Request) {
     due_date: z.string(),
     learning_styles: z.record(
       z.enum([
-        'hands-on projects',
-        'step-by-step tutorials',
-        'articles & documentation',
-        'video walkthroughs',
-        'building with community',
-        'AI tutors',
+        'Hands-on projects',
+        'Structured tutorials',
+        'Readng/writing',
+        'Videos',
+        'Peer/Community learning + growth',
+        'Guided Coaching/AI tutors',
       ]),
       z.boolean()
     ),
@@ -66,7 +65,6 @@ export async function POST(req: Request) {
     validated = schema.parse({
       goal_type: body.goalType,
       end_result: body.endResult,
-      success_criteria: body.successCriteria,
       experience_lvl: body.selectedLVL,
       starting_point: body.startPoint,
       commit_time: body.commitTime.trim(),
@@ -89,7 +87,6 @@ export async function POST(req: Request) {
   const {
     goal_type,
     end_result,
-    success_criteria,
     experience_lvl,
     starting_point,
     commit_time,
@@ -102,7 +99,6 @@ export async function POST(req: Request) {
       user_id: user.id,
       goal_type,
       end_result,
-      success_criteria,
       experience_lvl,
       starting_point,
       commit_time,

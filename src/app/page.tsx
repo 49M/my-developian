@@ -3,12 +3,10 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-// import remarkBreaks from 'remark-breaks';
-// import { UsersInTable } from '@/utils/UsersInTable';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import TopBar from '@/components/TopBar';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
@@ -28,6 +26,7 @@ import { GoalInputProps } from '@/types';
 import useRoadmap from '@/hooks/useRoadmap';
 import useSaveInputs from '@/hooks/useSaveInputs';
 import useSaveResponse from '@/hooks/useSaveResponse';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 async function handleSubmit(
   e: React.FormEvent,
@@ -83,31 +82,30 @@ export default function Page() {
   const [selectedLVL, setSelectedLVL] = useState<string>('');
   const levels = [
     {
-      name: 'lvl 1',
+      name: '0-1',
       label: goalType === 'skill' ? 'Beginner' : goalType === 'career' ? '0 - 1 Years' : 'Zero',
     },
     {
-      name: 'lvl 2',
+      name: '1-3',
       label:
         goalType === 'skill' ? 'Intermediate' : goalType === 'career' ? '1 - 3 Years' : 'Familiar',
     },
     {
-      name: 'lvl 3',
+      name: '3+',
       label: goalType === 'skill' ? 'Advanced' : goalType === 'career' ? '3+ Years' : 'Proficient',
     },
   ];
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
   const [learningStyles, setLearningStyles] = useState<Record<string, boolean>>({
-    'hands-on projects': false,
-    'step-by-step tutorials': false,
-    'articles & documentation': false,
-    'video walkthroughs': false,
-    'building with community': false,
-    'AI tutors': false,
+    'Hands-on projects': false,
+    'Structured tutorials': false,
+    'Readng/writing': false,
+    Videos: false,
+    'Peer/Community learning + growth': false,
+    'Guided Coaching/AI tutors': false,
   });
   const [endResult, setEndResult] = useState<string>('');
-  const [successCriteria, setSuccessCriteria] = useState<string>('');
   const [startPoint, setStartPoint] = useState<string>('');
   const [commitTime, setCommitTime] = useState<string>('');
   const { saveError, success, saveInputs } = useSaveInputs();
@@ -167,7 +165,7 @@ export default function Page() {
             </span>
           </h1>
           <div className='mt-[80px] flex w-full flex-col items-center justify-center'>
-            <h3 className='text-[17px]'>What type of milestone do you want to achieve?</h3>
+            <h3 className='text-[17px]'>Which type of goal do you want to achieve?</h3>
             <div
               className={`mt-[15px] flex space-x-1 rounded-lg border p-1 ${mode === 'light' ? 'border-black bg-white/20 shadow-sm' : 'border-gray-300 bg-gray-800/30'}`}
             >
@@ -198,7 +196,6 @@ export default function Page() {
                   {
                     goalType,
                     endResult,
-                    successCriteria,
                     selectedLVL,
                     startPoint,
                     commitTime,
@@ -214,22 +211,18 @@ export default function Page() {
               }
             >
               <h2 className='mb-2'>
-                What end-result do you hope to achieve? (be specific and provide context)
+                {`What's your goal, and what would success look like? (`}
+                <span className='italic'>
+                  Be specific: include measurable outcomes, context, and why it matters.
+                </span>
+                {`)`}
               </h2>
               <Textarea
                 className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
                 placeholder='Enter desired outcome'
                 onChange={(e) => setEndResult(e.target.value)}
               />
-              <h2 className='mb-2 mt-8'>What does succeeding with this goal look like for you?</h2>
-              <Input
-                className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'}`}
-                placeholder='Enter your success criteria'
-                onChange={(e) => setSuccessCriteria(e.target.value)}
-              />
-              <h2 className='mb-2 mt-8'>
-                What is your starting point (current level of experience) in relation to this goal?
-              </h2>
+              <h2 className='mb-2 mt-8'>Where are you now in relation to this goal?</h2>
               <div className='mb-3 mt-3 flex space-x-2 text-[12px]'>
                 {levels.map(({ name, label }) => (
                   <button
@@ -246,10 +239,12 @@ export default function Page() {
               </div>
               <Textarea
                 className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
-                placeholder='Enter current skills & relevent experience'
+                placeholder='Enter current skills, experiences, & relevent circumstances'
                 onChange={(e) => setStartPoint(e.target.value)}
               />
-              <h2 className='mb-2 mt-8'>How much time can you commit per week?</h2>
+              <h2 className='mb-2 mt-8'>
+                How much time can you commit weekly towards working on this goal?
+              </h2>
               <Select onValueChange={(value) => setCommitTime(value)}>
                 <SelectTrigger
                   className={`h-[33px] w-[150px] select-none ${mode === 'light' ? 'border-black' : 'border-white'}`}
@@ -298,50 +293,99 @@ export default function Page() {
                     />
                   </PopoverContent>
                 </Popover>
-                <h2 className='mb-2 mt-8'>How do you prefer to learn?</h2>
+                <h2 className='mb-2 mt-8'>
+                  {' '}
+                  {`How do you make the best progress? (`}
+                  <span className='italic'>Select any</span>
+                  {`)`}
+                </h2>
                 <div className='mt-2 grid grid-cols-3 gap-4'>
                   <LearningCheckboxes styles={learningStyles} setStyles={setLearningStyles} />
                 </div>
               </div>
+              <h2 className='mb-2 mt-8'>
+                {`What limitations or resources should we consider? (`}
+                <span className='italic'>Budget, location, tools, people access, etc.</span>
+                {`)`}
+              </h2>
+              <Textarea
+                className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
+                placeholder='Enter desired outcome'
+                onChange={(e) => setEndResult(e.target.value)}
+              />
               <button
-                className={`p mt-12 rounded-lg bg-blue-400/50 px-4 py-1 ${mode === 'light' ? 'border-black' : ''}`}
+                className={`p mt-12 rounded-lg px-4 py-2 ${mode === 'light' ? 'border-black' : ''} ${loading ? 'bg-gray-400/50' : 'bg-blue-400/50'}`}
                 type='submit'
+                disabled={loading}
               >
-                Get Roadmap
+                {loading ? 'Generating...' : 'Get Roadmap'}
               </button>
             </form>
+            {saveError && (
+              <Alert variant='default'>
+                <AlertTitle>Failed to save goal</AlertTitle>
+                <AlertDescription>Please try again later</AlertDescription>
+              </Alert>
+            )}
+            {success && (
+              <Alert variant='default'>
+                <AlertTitle>Goal Registered</AlertTitle>
+                <AlertDescription>Cooking up a success gameplan for you...</AlertDescription>
+              </Alert>
+            )}
           </div>
         </div>
       )}
       {resultPage && (
         <div>
-          <h1 className='mb-[100px] mt-[80px] flex flex-wrap justify-center text-center text-[45px] font-bold leading-tight'>
-            Your Winning Strategy:
-          </h1>
-          <div
-            className={`prose mx-[150px] max-w-none whitespace-pre-line ${
-              mode === 'light' ? '' : 'prose-invert'
-            } [&_li]:my-1 [&_p]:my-2`}
-          >
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                a: (props) => (
-                  <a
-                    {...props}
-                    className='text-blue-600 underline'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  />
-                ),
-              }}
-            >
-              {aiResponse}
-            </ReactMarkdown>
-          </div>
+          {error && (
+            <Alert variant='default'>
+              <AlertTitle>Failed to generate</AlertTitle>
+              <AlertDescription>Please try again later</AlertDescription>
+            </Alert>
+          )}
+          {roadmap && (
+            <div>
+              <h1 className='mb-[100px] mt-[80px] flex flex-wrap justify-center text-center text-[45px] font-bold leading-tight'>
+                Your Winning Strategy:
+              </h1>
+              <div
+                className={`prose mx-[150px] max-w-none whitespace-pre-line ${
+                  mode === 'light' ? '' : 'prose-invert'
+                } [&_li]:my-1 [&_p]:my-2`}
+              >
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    a: (props) => (
+                      <a
+                        {...props}
+                        className='text-blue-600 underline'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      />
+                    ),
+                  }}
+                >
+                  {aiResponse}
+                </ReactMarkdown>
+              </div>
+            </div>
+          )}
+          {saveResError && (
+            <Alert variant='default'>
+              <AlertTitle>Failed to Save</AlertTitle>
+              <AlertDescription>Roadmap failed to save, please try again later</AlertDescription>
+            </Alert>
+          )}
+          {resSuccess && (
+            <Alert variant='default'>
+              <AlertTitle>Roadmap Saved</AlertTitle>
+              <AlertDescription>Woohoo! Now you&apos;ve got a reference point</AlertDescription>
+            </Alert>
+          )}
         </div>
       )}
-      {/* <h1 className='text-xl font-bold'></h1> */}
     </div>
   );
 }
