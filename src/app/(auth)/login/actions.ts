@@ -16,6 +16,6 @@ export async function login(formData: FormData) {
   if (error) {
     return { error: 'Log in failed. Please check your credentials' };
   }
-  revalidatePath('/', 'layout');
-  redirect('/');
+  revalidatePath('/main', 'layout');
+  redirect('/main');
 }

@@ -27,22 +27,13 @@ export default function TopBar({ name, mode, changeMode }: TopBarProps) {
             My Developian
           </h3>
           <div className='hidden space-x-6 pt-[3px] smd:flex'>
-            <h3
-              className='cursor-pointer font-manrope'
-              onClick={() => router.push('/pages/roadmaps')}
-            >
+            <h3 className='cursor-pointer font-manrope' onClick={() => router.push('/roadmaps')}>
               Roadmaps
             </h3>
-            <h3
-              className='cursor-pointer font-manrope'
-              onClick={() => router.push('/pages/calender')}
-            >
+            <h3 className='cursor-pointer font-manrope' onClick={() => router.push('/calender')}>
               Calender
             </h3>
-            <h3
-              className='cursor-pointer font-manrope'
-              onClick={() => router.push('/pages/progress')}
-            >
+            <h3 className='cursor-pointer font-manrope' onClick={() => router.push('/progress')}>
               Progress
             </h3>
           </div>
