@@ -94,7 +94,10 @@ const myDevelopianLanding: React.FC = () => {
                 Success stories
               </a>
             </div>
-            <button className='rounded-lg bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-800'>
+            <button
+              onClick={() => router.push('/login')}
+              className='rounded-lg bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-800'
+            >
               Try for free
             </button>
           </div>
@@ -380,7 +383,10 @@ const myDevelopianLanding: React.FC = () => {
           </p>
 
           <div className='flex flex-col items-center justify-center gap-6 sm:flex-row'>
-            <button className='flex items-center gap-2 rounded-xl bg-blue-600 px-10 py-4 text-lg font-bold text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700'>
+            <button
+              onClick={() => router.push('/login')}
+              className='flex items-center gap-2 rounded-xl bg-blue-600 px-10 py-4 text-lg font-bold text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700'
+            >
               Get started free
               <ArrowRight className='h-5 w-5' />
             </button>
