@@ -100,7 +100,7 @@ export default function Page() {
   const [learningStyles, setLearningStyles] = useState<Record<string, boolean>>({
     'Hands-on projects': false,
     'Structured tutorials': false,
-    'Readng/writing': false,
+    'Reading/writing': false,
     Videos: false,
     'Peer/Community learning + growth': false,
     'Guided Coaching/AI tutors': false,
@@ -108,6 +108,7 @@ export default function Page() {
   const [endResult, setEndResult] = useState<string>('');
   const [startPoint, setStartPoint] = useState<string>('');
   const [commitTime, setCommitTime] = useState<string>('');
+  const [limitations, setLimitations] = useState<string>('');
   const { saveError, success, saveInputs } = useSaveInputs();
   const { error, loading, roadmap, generateRoadmap } = useRoadmap();
   const { saveResError, resSuccess, saveResponse } = useSaveResponse();
@@ -201,6 +202,7 @@ export default function Page() {
                     commitTime,
                     date,
                     learningStyles,
+                    limitations,
                   } as GoalInputProps,
                   setResultPage,
                   setAiResponse,
@@ -311,7 +313,7 @@ export default function Page() {
               <Textarea
                 className={`shadow-m w-full ${mode === 'light' ? 'border-black' : 'border-white'} max-h-[150px]`}
                 placeholder='Enter desired outcome'
-                onChange={(e) => setEndResult(e.target.value)}
+                onChange={(e) => setLimitations(e.target.value)}
               />
               <button
                 className={`p mt-12 rounded-lg px-4 py-2 ${mode === 'light' ? 'border-black' : ''} ${loading ? 'bg-gray-400/50' : 'bg-blue-400/50'}`}

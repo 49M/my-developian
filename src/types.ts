@@ -23,4 +23,5 @@ export interface GoalInputProps {
     | 'Guided Coaching/AI tutors',
     boolean
   >;
+  limitations: string;
 }

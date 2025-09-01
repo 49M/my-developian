@@ -51,13 +51,14 @@ export async function POST(req: Request) {
       z.enum([
         'Hands-on projects',
         'Structured tutorials',
-        'Readng/writing',
+        'Reading/writing',
         'Videos',
         'Peer/Community learning + growth',
         'Guided Coaching/AI tutors',
       ]),
       z.boolean()
     ),
+    limitations: z.string().optional(),
   });
   let validated;
   console.log(body);
@@ -70,6 +71,7 @@ export async function POST(req: Request) {
       commit_time: body.commitTime.trim(),
       due_date: body.date ? new Date(body.date).toISOString() : '',
       learning_styles: body.learningStyles,
+      limitations: body.limitations || '',
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -92,6 +94,7 @@ export async function POST(req: Request) {
     commit_time,
     due_date,
     learning_styles,
+    limitations,
   } = validated;
   const { data, error } = await supabase
     .from('user_prompts')
@@ -104,6 +107,7 @@ export async function POST(req: Request) {
       commit_time,
       due_date,
       learning_styles,
+      limitations,
     })
     .select()
     .single();
