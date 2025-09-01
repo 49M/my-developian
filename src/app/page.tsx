@@ -4,29 +4,26 @@ import React, { useState, useEffect } from 'react';
 import {
   ArrowUpRight,
   Target,
-  Zap,
   Brain,
-  ChevronDown,
   Play,
   ArrowRight,
   Check,
   Sparkles,
   TrendingUp,
-  Clock,
-  Users,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-const myDevelopianLanding: React.FC = () => {
-  const [scrollY, setScrollY] = useState(0);
+const MyDevelopianLanding: React.FC = () => {
+  // const [scrollY, setScrollY] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [typingText, setTypingText] = useState('');
   const fullText = 'I want to become a software engineer at a top tech company';
   const router = useRouter();
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () =>
+      // setScrollY(window.scrollY);
+      window.addEventListener('scroll', handleScroll);
 
     const stepInterval = setInterval(() => {
       setCurrentStep((prev) => (prev + 1) % 4);
@@ -357,7 +354,7 @@ const myDevelopianLanding: React.FC = () => {
               <div key={i} className='rounded-2xl border border-slate-100 bg-white p-8 shadow-lg'>
                 <div className='mb-6'>
                   <p className='text-lg italic leading-relaxed text-slate-700'>
-                    "{testimonial.quote}"
+                    {`"${testimonial.quote}"`}
                   </p>
                 </div>
                 <div className='flex items-center justify-between'>
@@ -426,4 +423,4 @@ const myDevelopianLanding: React.FC = () => {
   );
 };
 
-export default myDevelopianLanding;
+export default MyDevelopianLanding;
