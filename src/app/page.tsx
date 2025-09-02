@@ -21,9 +21,9 @@ const MyDevelopianLanding: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const handleScroll = () =>
-      // setScrollY(window.scrollY);
-      window.addEventListener('scroll', handleScroll);
+    // const handleScroll = () =>
+    //   // setScrollY(window.scrollY);
+    //   window.addEventListener('scroll', handleScroll);
 
     const stepInterval = setInterval(() => {
       setCurrentStep((prev) => (prev + 1) % 4);
@@ -40,7 +40,7 @@ const MyDevelopianLanding: React.FC = () => {
     }, 100);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      // window.removeEventListener('scroll', handleScroll);
       clearInterval(stepInterval);
       clearInterval(typingInterval);
     };
