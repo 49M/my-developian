@@ -7,3 +7,5 @@ export const roadmapStateSchema = z.object({
   prompt: z.custom<ChatMessage>(),
   roadmap: z.string().optional(),
 });
+
+export type RoadmapState = z.infer<typeof roadmapStateSchema>;
