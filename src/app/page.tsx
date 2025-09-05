@@ -29,7 +29,6 @@ const MyDevelopianLanding: React.FC = () => {
       setCurrentStep((prev) => (prev + 1) % 4);
     }, 2500);
 
-    // Typing effect
     const typingInterval = setInterval(() => {
       setTypingText((prev) => {
         if (prev.length < fullText.length) {
