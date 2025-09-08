@@ -69,7 +69,6 @@ const MyDevelopianLanding: React.FC = () => {
 
   return (
     <div className='relative min-h-screen bg-slate-50 text-slate-900'>
-      {/* Navigation */}
       <nav className='fixed top-0 z-50 w-full border-b border-slate-200/60 bg-slate-50/95 backdrop-blur-lg'>
         <div className='mx-auto max-w-6xl px-6 py-4'>
           <div className='flex items-center justify-between'>
