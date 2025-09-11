@@ -401,8 +401,13 @@ const MyDevelopianLanding: React.FC = () => {
         <div className='mx-auto max-w-6xl'>
           <div className='flex flex-col items-center justify-between gap-8 md:flex-row'>
             <div className='flex items-center gap-2 text-xl font-bold'>
-              <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold'>
-                R
+              <div className='flex items-center justify-center'>
+                <Image
+                  src='/modern_crown_logo.png'
+                  alt='MyDevelopian Logo'
+                  width={38}
+                  height={38}
+                />
               </div>
               MyDevelopian
             </div>
