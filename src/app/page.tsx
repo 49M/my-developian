@@ -12,6 +12,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const MyDevelopianLanding: React.FC = () => {
   // const [scrollY, setScrollY] = useState(0);
@@ -72,9 +73,14 @@ const MyDevelopianLanding: React.FC = () => {
       <nav className='fixed top-0 z-50 w-full border-b border-slate-200/60 bg-slate-50/95 backdrop-blur-lg'>
         <div className='mx-auto max-w-6xl px-6 py-4'>
           <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-2 text-xl font-bold'>
-              <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white'>
-                R
+            <div className='flex items-center gap-1 text-xl font-bold'>
+              <div className='flex items-center justify-center'>
+                <Image
+                  src='/modern_crown_logo.png'
+                  alt='MyDevelopian Logo'
+                  width={38}
+                  height={38}
+                />
               </div>
               MyDevelopian
             </div>
