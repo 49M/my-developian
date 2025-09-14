@@ -396,7 +396,6 @@ const MyDevelopianLanding: React.FC = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className='border-t border-slate-800 bg-slate-900 px-6 py-12 text-white'>
         <div className='mx-auto max-w-6xl'>
           <div className='flex flex-col items-center justify-between gap-8 md:flex-row'>
