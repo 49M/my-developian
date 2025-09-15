@@ -374,7 +374,6 @@ const MyDevelopianLanding: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA */}
       <section className='bg-slate-900 px-6 py-32 text-center text-white'>
         <div className='mx-auto max-w-4xl'>
           <h2 className='mb-8 text-6xl font-bold leading-tight'>Ready to level up?</h2>
